@@ -1,0 +1,26 @@
+{
+  "name": "pure-electron",
+  "version": "1.0.0",
+  "description": "Pure - Roblox Script Executor",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^28.2.3",
+    "electron-builder": "^24.14.1"
+  },
+  "build": {
+    "appId": "com.pure.electron",
+    "productName": "Pure",
+    "files": [
+      "**/*"
+    ],
+    "win": {
+      "target": ["nsis", "portable"]
+    }
+  },
+  "author": "",
+  "license": "MIT"
+} 

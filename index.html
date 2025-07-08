@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pure - Roblox Script Executor</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <img src="https://i.imgur.com/2btdPYc.png" alt="Pure Logo" width="64" height="64">
+      </div>
+      <h2>Pure</h2>
+      <p>Loading...</p>
+      <div class="loading-bar">
+        <div class="loading-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-container" id="app-container" style="display: none;">
+    <div class="window-controls">
+      <div class="window-control minimize" id="minimize-btn">
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <rect x="2" y="5" width="8" height="2" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="window-control maximize" id="maximize-btn">
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <rect x="2" y="2" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="window-control close" id="close-btn">
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <nav class="main-nav" id="main-nav">
+      <div class="nav-item active" data-tab="home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+        <span>Home</span>
+      </div>
+      <div class="nav-item" data-tab="editor">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+        </svg>
+        <span>Editor</span>
+      </div>
+      <div class="nav-item" data-tab="scripthub">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="7.5,4.21 12,6.81 16.5,4.21"/>
+          <polyline points="7.5,19.79 7.5,14.6 3,12"/>
+          <polyline points="21,12 16.5,14.6 16.5,19.79"/>
+          <polyline points="3.27,6.96 12,12.01 20.73,6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+        <span>ScriptHub</span>
+      </div>
+      <div class="nav-item" data-tab="settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span>Settings</span>
+      </div>
+    </nav>
+
+    <main class="content-area">
+      <div class="tab-content active" id="home-tab">
+        <div class="home-container">
+          <div class="welcome-section">
+            <div class="logo-container">
+              <img src="https://i.imgur.com/2btdPYc.png" alt="Pure Logo" width="80" height="80">
+            </div>
+            <h1>Welcome to Pure</h1>
+            <p class="welcome-subtitle">Advanced Roblox Script Executor</p>
+            <div class="user-info">
+              <div class="user-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div class="user-details">
+                <span class="user-name">Welcome back, User!</span>
+                <span class="user-status">Ready to execute scripts</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-section">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
+              <div class="stat-content">
+                <h3>Scripts Executed</h3>
+                <span class="stat-number" id="scripts-executed">0</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+              </div>
+              <div class="stat-content">
+                <h3>Roblox Status</h3>
+                <span class="stat-number" id="roblox-status">Not Injected</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12,6 12,12 16,14"/>
+                </svg>
+              </div>
+              <div class="stat-content">
+                <h3>Uptime</h3>
+                <span class="stat-number" id="uptime">00:00:00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <div class="action-card" onclick="switchToTab('editor')">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14,2 14,8 20,8"/>
+              </svg>
+              <h3>New Script</h3>
+              <p>Create a new script</p>
+            </div>
+            <div class="action-card" onclick="switchToTab('scripthub')">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              </svg>
+              <h3>Script Hub</h3>
+              <p>Browse scripts</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="editor-tab">
+        <div class="editor-layout">
+          <div class="editor-main">
+            <header class="topbar">
+              <div class="topbar-title">Editor</div>
+            </header>
+            <div class="editor-container" id="editor-container">
+              <iframe id="monaco-iframe" src="https://puremonaco1.vercel.app/" style="width:100%;height:600px;min-height:400px;border:none;border-radius:16px;overflow:hidden;" allowfullscreen></iframe>
+            </div>
+            <div class="editor-actions">
+              <button id="inject-btn" class="action-btn" title="Inject Script">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span>Inject</span>
+              </button>
+              <button id="execute-btn" class="action-btn" title="Execute Script">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5,3 19,12 5,21 5,3"/>
+                </svg>
+                <span>Execute</span>
+              </button>
+              <button id="save-btn" class="action-btn" title="Save File">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                  <polyline points="17,21 17,13 7,13 7,21"/>
+                  <polyline points="7,3 7,8 15,8"/>
+                </svg>
+                <span>Save</span>
+              </button>
+              <button id="load-btn" class="action-btn" title="Load File">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7,10 12,15 17,10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Load</span>
+              </button>
+              <button id="clear-btn" class="action-btn" title="Clear Console">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                <span>Clear</span>
+              </button>
+              <button id="kill-btn" class="action-btn danger" title="Kill Roblox">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18.364 18.364A9 9 0 1 1 5.636 5.636a9 9 0 0 1 12.728 12.728zM12 8v4m0 4h.01"/>
+                </svg>
+                <span>Kill Roblox</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="scripthub-tab">
+        <div class="scripthub-container">
+          <div class="scripthub-header">
+            <h2>Script Hub</h2>
+            <div class="search-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <input type="text" placeholder="Search scripts..." id="script-search">
+            </div>
+          </div>
+          
+          <div class="filter-tags">
+            <button class="filter-tag active" data-filter="all">All</button>
+            <button class="filter-tag" data-filter="admin">Admin</button>
+            <button class="filter-tag" data-filter="esp">ESP</button>
+            <button class="filter-tag" data-filter="exploit">Exploit</button>
+            <button class="filter-tag" data-filter="utility">Utility</button>
+            <button class="filter-tag" data-filter="game">Game</button>
+          </div>
+          
+          <div class="scripts-grid" id="scripts-grid">
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="settings-tab">
+        <div class="settings-container">
+          <h2>Settings</h2>
+          <div class="settings-section">
+            <h3>Editor</h3>
+            <div class="setting-item">
+              <label for="font-size">Font Size</label>
+              <div class="custom-slider">
+                <input type="range" id="font-size" min="12" max="24" value="16">
+                <span class="setting-value" id="font-size-value">16px</span>
+              </div>
+            </div>
+            <div class="setting-item">
+              <label for="auto-save">Auto Save</label>
+              <label class="switch">
+                <input type="checkbox" id="auto-save">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="line-numbers">Line Numbers</label>
+              <label class="switch">
+                <input type="checkbox" id="line-numbers" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="word-wrap">Word Wrap</label>
+              <label class="switch">
+                <input type="checkbox" id="word-wrap" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="minimap">Minimap</label>
+              <label class="switch">
+                <input type="checkbox" id="minimap">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="typing-animation">Typing Animation</label>
+              <label class="switch">
+                <input type="checkbox" id="typing-animation" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h3>About</h3>
+            <div class="about-info">
+              <p><strong>Pure</strong> - Advanced Roblox Script Executor</p>
+              <p>Version: 1.0.0</p>
+              <p>Built with Electron & Monaco Editor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html> 
